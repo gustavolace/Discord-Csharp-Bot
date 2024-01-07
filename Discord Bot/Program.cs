@@ -11,7 +11,13 @@ using Newtonsoft.Json.Linq;
 class Progam {
     private static DiscordSocketClient client;
 
-    static async Task Main(string[] args)
+    private static async Task Main(string[] args)
+    {
+        Progam program = new Progam();
+        await program.StartAsync();
+    }
+
+    private async Task StartAsync()
     {
 
         // .env
@@ -28,20 +34,20 @@ class Progam {
         //
         client.Ready += ReadyAsync;
         client.MessageReceived += MessageReceivedAsync;
-        client.SlashCommandExecuted += SlashCcommandHandler;
+        //client.SlashCommandExecuted += SlashCcommandHandler;
         //
 
         //
         await client.LoginAsync(Discord.TokenType.Bot, token);
         await client.StartAsync();
         //
-       
+
 
 
         await Task.Delay(-1);
     }
 
-    private static async Task MessageReceivedAsync(SocketMessage message)
+    private async Task MessageReceivedAsync(SocketMessage message)
     {
         if(message.Author.IsBot)
         {
@@ -55,25 +61,42 @@ class Progam {
         }
     }
 
-    private static async Task ReadyAsync()
+    public async Task ReadyAsync()
     {
 
-        //
-        var guild = client.GetGuild(896940870341890059);
-        var guildCommand = new SlashCommandBuilder();
-        guildCommand.WithName("firs-command");
-        guildCommand.WithDescription("This is my first guild slash command!");
-        //
-
-        var globalCommand = new SlashCommandBuilder();
-        globalCommand.WithName("first-global-command");
+       /* var globalCommand = new SlashCommandBuilder();
+        globalCommand.WithName("choise");
         globalCommand.WithDescription("This is my first global slash command");
+        globalCommand.AddOption(new SlashCommandOptionBuilder()
+         .WithName("sfw")
+         .WithDescription("")
+         .WithRequired(true)
+         .AddChoice("Hello", 1)); */
 
-        //
+        var globalCommand2 = new SlashCommandBuilder()
+        .WithName("second")
+        .WithDescription("This is my seccond global slash command");
+
+       /* var globalCommand3 = new SlashCommandBuilder()
+       .WithName("theree")
+       .WithDescription("e  otress tres ")
+       .AddOption(new SlashCommandOptionBuilder()
+         .WithName("sfw")
+         .WithDescription("")
+         .WithRequired(true)
+         .AddChoice("Hello", 1)); */
+
+        var globalCommand4 = new SlashCommandBuilder()
+       .WithName("4")
+       .WithDescription("e  otress tres ");
+
+
         try
         {
-            await guild.CreateApplicationCommandAsync(guildCommand.Build());
-            await client.CreateGlobalApplicationCommandAsync(globalCommand.Build());
+            //await client.CreateGlobalApplicationCommandAsync(globalCommand.Build());
+            await client.CreateGlobalApplicationCommandAsync(globalCommand2.Build());
+            //await client.CreateGlobalApplicationCommandAsync(globalCommand3.Build());
+            await client.CreateGlobalApplicationCommandAsync(globalCommand4.Build());
         }
         catch (ApplicationCommandException exception)
         {
@@ -81,12 +104,23 @@ class Progam {
             Console.WriteLine(json);
         }
 
-        /*var channel = guild.GetTextChannel(936372639822401541);
-        await channel.SendMessageAsync("Olá, boa noite!");
-        Console.WriteLine("Bot está pronto para receber comandos!");*/
+        /* try
+         {
+             await client.Rest.CreateGlobalCommand(globalCommand.Build());
+         }
+         catch(ApplicationCommandException exception)
+         {
+             var json = JsonConvert.SerializeObject(exception, Formatting.Indented);
+             Console.WriteLine(json);
+         }
+
+         */
+
     }
 
-    private static async Task SlashCcommandHandler(SocketSlashCommand command)
+
+
+   /* private static async Task SlashCcommandHandler(SocketSlashCommand command)
     {
         using (var clientHTTP = new HttpClient())
         {
@@ -104,8 +138,13 @@ class Progam {
                 string _url = (string)obj["url"];
                 Console.WriteLine(_url);
 
+                var embed = new EmbedBuilder()
+                .WithTitle("gostosa")
+                .WithImageUrl(_url)
+                .Build();
+
                 //
-                await command.RespondAsync($"{_url}");
+                await command.RespondAsync(embed: embed);
             }
             else
             {
@@ -113,5 +152,6 @@ class Progam {
                 Console.WriteLine($"Falha na requisição. Status Code: {response.StatusCode}");
             }
         }
-    }
+    } 
+   */
 }
